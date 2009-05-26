@@ -11,6 +11,8 @@ modern programming languages (think Python, Ruby, or Haskell). It's not
 intended to appeal to anyone other than myself; it's more like a sandbox
 for my experiments.
 
+The current implementation is written in OCaml.
+
                          ---
 
 Somersault is syntactically similar to the ML family of languages.
