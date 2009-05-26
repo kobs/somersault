@@ -13,13 +13,15 @@ for my experiments.
 
                          ---
 
-The virtual machine is based on the CSE (Control, Stack, Environment) machine,
-which oddly has very literature written about it. Suggestions for alternatives
-are welcome.
+Somersault is syntactically similar to the ML family of languages.
 
-A Somersault program consists of a single expression. There are no statements 
-in Somersault.
+A Somersault program consists of a single expression. There are no assignments
+or statements in Somersault.
 
 Available primitives include booleans, integers, and (immutable) strings.
 
 The basic collection type is a heterogenous tuple.
+
+The virtual machine is based on the CSE (Control, Stack, Environment) machine,
+which oddly has very literature written about it. Suggestions for alternatives
+are welcome.
