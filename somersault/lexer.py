@@ -219,7 +219,8 @@ class Lexer(object):
         
     def _skip_whitespace(self):
         """
-        Skips whitespace.
+        Skip whitespace (as defined by string.whitespace.)
+        Increment self._lineno if a newline is encountered.
         """
         next = self._peek()
         if not next:
