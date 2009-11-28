@@ -14,6 +14,7 @@ class TokenType(object):
      RPAREN,
      SEMICOLON,
      COMMA,
+     ASSIGN,
      EOF,
 
      # reserved words
@@ -22,6 +23,7 @@ class TokenType(object):
      WHERE,
      WITHIN,
      AND,
+     IN,
      
 
      # reserved operator words
@@ -35,7 +37,7 @@ class TokenType(object):
      EQ,
      NE,
      NEG,
-     ) = range(24)
+     ) = range(26)
 
     
      
@@ -60,6 +62,7 @@ class Token(object):
         if type == TokenType.RPAREN: return "RPAREN"
         if type == TokenType.SEMICOLON: return "SEMICOLON"
         if type == TokenType.COMMA: return "COMMA"
+        if type == TokenType.ASSIGN: return "ASSIGN"
         if type == TokenType.EOF: return "EOF"
         
         if type == TokenType.LET: return "LET"
@@ -67,6 +70,7 @@ class Token(object):
         if type == TokenType.WHERE: return "WHERE"
         if type == TokenType.WITHIN: return "WITHIN"
         if type == TokenType.AND: return "AND"
+        if type == TokenType.IN: return "IN"
 
         if type == TokenType.OR: return "OR"
         if type == TokenType.AMPERSAND: return "AMPERSAND"
@@ -89,12 +93,14 @@ reserved = {"(": TokenType.LPAREN,
             ")": TokenType.RPAREN,
             ";": TokenType.SEMICOLON,
             ",": TokenType.COMMA,
+            "=": TokenType.ASSIGN,
             
             "let": TokenType.LET,
             "rec": TokenType.REC,
             "where": TokenType.WHERE,
             "within": TokenType.WITHIN,
             "and": TokenType.AND,
+            "in": TokenType.IN,
             
             "or": TokenType.OR,
             "&": TokenType.AMPERSAND,

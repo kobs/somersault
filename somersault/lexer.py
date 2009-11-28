@@ -32,6 +32,7 @@ class Lexer(object):
         self._source = source
         self._sourcelen = len(source)
         self._state = State.START
+        self._eof = False
 
     def _advance(self):
         """
@@ -39,7 +40,7 @@ class Lexer(object):
         """
         self._position += 1
         if self._position >= self._sourcelen:
-            self._state = State.DONE    
+            self._eof = True   
 
     def in_range(self, c, start, end):
         """
@@ -50,48 +51,6 @@ class Lexer(object):
     def __iter__(self):
         return self
     
-    def next(self):
-        """
-        Return the next token or raise StopIteration
-        """
-        if self._state is not State.DONE:
-            return self.next_token()
-        else:
-            raise StopIteration
-
-    def _next_char(self):
-        """
-        Return the next character in the input stream and advance to the next.
-        """
-        c = self._peek()
-        if c:
-            self._advance()
-            return c
-        else:
-            return None
-        
-    def next_token(self):
-        """
-        Scan the next Token and return it.
-        """
-        if self._state is State.DONE:
-            return None
-
-        self._skip_whitespace()
-
-        if self._state is State.DONE:
-            return None
-
-        c = self._next_char()
-        if c in string.punctuation:
-            return self._match_operator(c)
-        if c in string.digits:
-            return self._match_integer(c)
-        if c in string.letters:
-            return self._match_identifier(c)
-
-        raise UnknownToken(c)
-
     def _match_identifier(self, c):
         """
         Match an identifier token.
@@ -136,7 +95,23 @@ class Lexer(object):
         Match an operator.
         """
         self._state = State.OPERATOR
-        pass
+
+        if c in tokens.reserved:
+            return Token(tokens.reserved[c], c, self._lineno)
+        # if c == "."
+
+        s = c
+        next = self._peek()
+        if not next:
+            return Token(TokenType.OPERATOR, s, self._lineno)
+
+        while next in string.punctuation:
+            s += next
+            self._advance()
+            next = self._peek()
+            if not next:
+                break
+        return Token(TokenType.OPERATOR, s, self._lineno)
 
     def _match_string(self, c):
         """
@@ -144,11 +119,56 @@ class Lexer(object):
         """
         pass
 
+    def next(self):
+        """
+        Return the next token or raise StopIteration
+        """
+        if not self._eof and self._state is not State.DONE:
+            return self.next_token()
+        else:
+            raise StopIteration
+
+    def _next_char(self):
+        """
+        Return the next character in the input stream and advance to the next.
+        """
+        c = self._peek()
+        if c:
+            self._advance()
+            return c
+        else:
+            return None
+        
+    def next_token(self):
+        """
+        Scan the next Token and return it.
+        """
+        if self._eof or self._state is State.DONE:
+            return None
+
+        self._skip_whitespace()
+
+        if self._state is State.DONE:
+            return None
+
+        c = self._next_char()
+        if not c:
+            return None
+        
+        if c in string.punctuation:
+            return self._match_operator(c)
+        if c in string.digits:
+            return self._match_integer(c)
+        if c in string.letters:
+            return self._match_identifier(c)
+
+        raise UnknownToken(c)
+    
     def _peek(self):
         """
         Return the next character in the input stream without advancing.
         """
-        if self._state is not State.DONE:
+        if not self._eof and self._state is not State.DONE:
             return self._source[self._position]
         else:
             return None
@@ -157,15 +177,17 @@ class Lexer(object):
         """
         Skips whitespace.
         """
-        c = self._peek()
-        while c in string.whitespace:
-            if c == '\n':
+        next = self._peek()
+        if not next:
+            return
+        
+        while next in string.whitespace:
+            if next == '\n':
                 self._lineno += 1
             self._advance()
-            c = self._peek()
-
-        if self._position >= self._sourcelen:
-            self._state = State.DONE
+            next = self._peek()
+            if not next:
+                break
 
 
 
