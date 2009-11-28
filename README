@@ -1,0 +1,30 @@
+                                               _ _   
+ ___  ___  _ __ ___   ___ _ __ ___  __ _ _   _| | |_ 
+/ __|/ _ \| '_ ` _ \ / _ \ '__/ __|/ _` | | | | | __|
+\__ \ (_) | | | | | |  __/ |  \__ \ (_| | |_| | | |_ 
+|___/\___/|_| |_| |_|\___|_|  |___/\__,_|\__,_|_|\__|
+
+-------------------------------------------------------------
+
+Somersault is a tiny functional programming language inspired by RPAL and
+modern programming languages (think Python, Ruby, OCaml, or Haskell). It's not
+intended to appeal to anyone other than myself; it's more like a sandbox
+for my experiments.
+
+The current implementation is written in Python (for now, at least. I'm
+probably going to rewrite it in Haskell for my honors thesis.)
+
+                         ---
+
+Somersault is syntactically similar to the ML family of languages.
+
+A Somersault program consists of a single expression. There are no statements
+and no concept of assignment.
+
+Available primitives include booleans, integers, and (immutable) strings.
+
+The basic collection type is a heterogenous tuple.
+
+The virtual machine is based on the CSE (Control, Stack, Environment) machine,
+which oddly has very little literature written about it. Suggestions for 
+alternatives are welcome.
