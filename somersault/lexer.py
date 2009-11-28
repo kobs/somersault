@@ -168,7 +168,10 @@ class Lexer(object):
         Return the next token or raise StopIteration
         """
         if not self._eof and self._state is not State.DONE:
-            return self.next_token()
+            token = self.next_token()
+            while token and token.type == TokenType.COMMENT:
+                token = self.next_token()
+            return token
         else:
             raise StopIteration
 
