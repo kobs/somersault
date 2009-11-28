@@ -1,4 +1,5 @@
 import string
+import sys
 
 from exception import *
 from tokens import *
@@ -25,7 +26,7 @@ class Lexer(object):
     """
     def __init__(self, source):
         self._position = 0
-        self._lineno = 0
+        self._lineno = 1
         self._source = source
         self._sourcelen = len(source)
         self._state = State.START
@@ -94,6 +95,19 @@ class Lexer(object):
         Match an identifier token.
         """
         self._state = State.IDENTIFIER
+        s = c
+        next = self._peek()
+        if not next:
+            return None
+
+        while next in string.letters:
+            s += next
+            self._advance()
+            next = self._peek()
+            if not next:
+                break
+
+        return Token(TokenType.IDENTIFIER, s, self._lineno)
 
     def _match_integer(self, c):
         """
@@ -109,7 +123,8 @@ class Lexer(object):
             num = (num * 10) + int(next)
             self._advance()
             next = self._peek()
-            if not next: break
+            if not next:
+                break
 
         return Token(TokenType.INTEGER, num, self._lineno)
 
@@ -151,5 +166,5 @@ class Lexer(object):
 
 
 
-for t in Lexer("1234 \n56789 999999 1729 314159"):
+for t in Lexer(file(sys.argv[1]).read()):
     print t
