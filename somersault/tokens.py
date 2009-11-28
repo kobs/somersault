@@ -83,3 +83,26 @@ class Token(object):
     
     def __str__(self):
         return "(%s, %s, %d)" % (self.type_str(self.type), str(self.value), self.lineno)
+
+# reserved keywords/operators
+reserved = {"(": TokenType.LPAREN,
+            ")": TokenType.RPAREN,
+            ";": TokenType.SEMICOLON,
+            ",": TokenType.COMMA,
+            
+            "let": TokenType.LET,
+            "rec": TokenType.REC,
+            "where": TokenType.WHERE,
+            "within": TokenType.WITHIN,
+            "and": TokenType.AND,
+            
+            "or": TokenType.OR,
+            "&": TokenType.AMPERSAND,
+            "not": TokenType.NOT,
+            "gr": TokenType.GR,
+            "ge": TokenType.GE,
+            "ls": TokenType.LS,
+            "le": TokenType.LE,
+            "eq": TokenType.EQ,
+            "ne": TokenType.NE,
+            "neg": TokenType.NEG}

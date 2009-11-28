@@ -1,6 +1,7 @@
 import string
 import sys
 
+import tokens
 from exception import *
 from tokens import *
 from utils import *
@@ -12,11 +13,12 @@ class State(object):
     (START,
      DONE,
      IDENTIFIER,
+     KEYWORD,
      INTEGER,
      OPERATOR,
      STRING,
      WHITESPACE,
-     COMMENT) = range(8)
+     COMMENT) = range(9)
     
 class Lexer(object):
     """
@@ -107,7 +109,8 @@ class Lexer(object):
             if not next:
                 break
 
-        return Token(TokenType.IDENTIFIER, s, self._lineno)
+        # try to match a reserved keyword
+        return Token(tokens.reserved.get(s, TokenType.IDENTIFIER), s, self._lineno)
 
     def _match_integer(self, c):
         """
