@@ -2,8 +2,10 @@ class UnknownToken(Exception):
     """
     Exception raised if the lexer encounters an unknown token.
     """
-    def __init__(self, text):
-        self.text = text
+    pass
 
-    def __str__(self):
-        return "UnknownToken:", text
+class NoMoreTokens(Exception):
+    """
+    Exception raised if the lexer has no more tokens to parse.
+    """
+    pass
