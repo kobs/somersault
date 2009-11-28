@@ -100,6 +100,9 @@ class Lexer(object):
             return Token(tokens.reserved[c], c, self._lineno)
         # if c == "."
 
+        if c == "\'":
+            return self._match_string(c)
+        
         s = c
         next = self._peek()
         if not next:
@@ -117,7 +120,21 @@ class Lexer(object):
         """
         Match a string literal.
         """
-        pass
+        self._state = State.STRING
+        s = ""
+        next = self._peek()
+        if not next:
+            return None
+
+        while next != "\'" and next in tokens.string_chars:
+            s += next
+            self._advance()
+            next = self._peek()
+            if not next:
+                break
+        self._advance()
+
+        return Token(TokenType.STRING, s, self._lineno)
 
     def next(self):
         """

@@ -1,2 +1,2 @@
-// showcase usage of 'and' definitions
-let x = 3 and y = 5 and z = 10 in Print(x+y, z)
+let x = 3 and y = 5 and z = 10
+    in Print(x+y, z, 'hello')

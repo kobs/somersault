@@ -1,3 +1,5 @@
+import string
+
 from exceptions import *
 
 class TokenType(object):
@@ -114,3 +116,9 @@ reserved = {"(": TokenType.LPAREN,
             "eq": TokenType.EQ,
             "ne": TokenType.NE,
             "neg": TokenType.NEG}
+
+# valid string characters
+string_chars = tuple(string.digits) + \
+               tuple(string.letters) + \
+               tuple(string.punctuation) + \
+               tuple(string.whitespace)
