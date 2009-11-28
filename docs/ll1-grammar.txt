@@ -1,0 +1,78 @@
+# Expressions ############################################ 
+E  -> 'let' D 'in' E             => 'let'
+   -> 'fn' Vb+ '.' E             => 'lambda'
+   -> Ew;
+Ew -> T 'where' Dr               => 'where'
+   -> T;
+
+# Tuple Expressions #####################################
+T  -> Ta ( ',' Ta )+             => 'tau'
+   -> Ta;
+Ta -> Tc Tz
+Tz -> Tc 'aug' Tz                => 'aug'
+   ->
+Tc -> B '->' Tc '|' Tc           => '->'
+   -> B;
+
+# Boolean Expressions ####################################
+B  -> Bt By
+By -> Bt 'or' By                 => 'or'
+   ->
+Bt -> Bs Bz
+Bz -> Bs '&' Bz                  => '&'
+   ->
+Bs -> 'not' Bp                   => 'not'
+   -> Bp;
+Bp -> A ('gr' | '>') A           => 'gr'
+   -> A ('ge' | '>=') A          => 'ge'
+   -> A ('ls' | '<') A           => 'ls'
+   -> A ('le' | '<=') A          => 'le'
+   -> A 'eq' A                   => 'eq'
+   -> A 'ne' A                   => 'ne'
+   -> A;
+
+# Arithmetic Expressions #################################
+A  -> A '+' At                   => '+'
+   -> A '-' At                   => '-'
+   ->   '+' At
+   ->   '-' At                   => 'neg'
+   -> At;
+At -> Af Az
+Az -> Af '*' Az                  => '*'
+   -> Af '/' Az                  => '/'
+   ->
+Af -> Ap '**' Af                 => '**'
+   -> Ap;
+Ap -> R Ay
+Ay -> R Ay                       => '@'
+   ->
+
+# Rators & Rands #########################################
+R  -> Rn Rx
+Rx -> Rn Rx                      => 'gamma' (2)
+   ->
+Rn -> '<IDENTIFIER>'
+   -> '<INTEGER>'
+   -> '<STRING>'
+   -> 'true'                     => 'true'
+   -> 'false'                    => 'false'
+   -> 'nil'                      => 'nil'
+   -> '(' E ')'
+   -> 'dummy'                    => 'dummy';
+
+# Definitions ############################################ 
+D  -> Da 'within' D              => 'within'
+   -> Da;
+Da -> Dr ( 'and' Dr )+           => 'and'
+   -> Dr;
+Dr -> 'rec' Db                   => 'rec'
+   -> Db;
+Db -> Vl '=' E                   => '='
+   -> '<IDENTIFIER>' Vb+ '=' E   => 'function_form'
+   -> '(' D ')';
+
+# Variables ############################################ 
+Vb -> '<IDENTIFIER>'
+   -> '(' Vl ')'
+   -> '(' ')'                    => '()'
+Vl -> '<IDENTIFIER>' list ','    => ','?
