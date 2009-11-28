@@ -162,7 +162,7 @@ class Lexer(object):
         if c in string.letters:
             return self._match_identifier(c)
 
-        raise UnknownToken(c)
+        return Token(TokenType.UNKNOWN, c, self._lineno)
     
     def _peek(self):
         """

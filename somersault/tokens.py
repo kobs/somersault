@@ -37,7 +37,9 @@ class TokenType(object):
      EQ,
      NE,
      NEG,
-     ) = range(26)
+
+     UNKNOWN
+     ) = range(27)
 
     
      
