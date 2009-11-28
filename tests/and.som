@@ -1,2 +1,5 @@
+// showcase usage of 'and' definitions
+//oh, hai
 let x = 3 and y = 5 and z = 10
-    in Print(x+y, z, 'hello')
+// is this thing on?
+    in Print(x+y, z, "hello")

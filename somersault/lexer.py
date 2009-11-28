@@ -50,6 +50,30 @@ class Lexer(object):
 
     def __iter__(self):
         return self
+
+    def _match_comment(self, c):
+        """
+        Match a single line comment.
+        """
+        self._state = State.COMMENT
+        s = ""
+        next = self._peek()
+        if not next or next != "/":
+            return None
+        self._advance()
+        next = self._peek()
+        if not next:
+            return None
+
+        while next != "\n" and next in tokens.string_comment_chars:
+            s += next
+            self._advance()
+            next = self._peek()
+            if not next:
+                break
+        self._advance()
+
+        return Token(TokenType.COMMENT, s, self._lineno)
     
     def _match_identifier(self, c):
         """
@@ -102,6 +126,9 @@ class Lexer(object):
 
         if c == "\'":
             return self._match_string(c)
+
+        if c == "/":
+            return self._match_comment(c)
         
         s = c
         next = self._peek()
@@ -126,7 +153,7 @@ class Lexer(object):
         if not next:
             return None
 
-        while next != "\'" and next in tokens.string_chars:
+        while next != "\'" and next in tokens.string_comment_chars:
             s += next
             self._advance()
             next = self._peek()
