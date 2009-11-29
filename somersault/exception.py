@@ -19,3 +19,12 @@ class NotImplemented(Exception):
     Exception raised if the Node has not implemented an abstract method.
     """
     pass
+
+class SyntaxError(Exception):
+    """
+    """
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        print msg
