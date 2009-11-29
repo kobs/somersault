@@ -13,3 +13,9 @@ class NoMoreTokens(Exception):
     Exception raised if the lexer has no more tokens to parse.
     """
     pass
+
+class NotImplemented(Exception):
+    """
+    Exception raised if the Node has not implemented an abstract method.
+    """
+    pass

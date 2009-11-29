@@ -93,7 +93,7 @@ class Lexer(object):
                 break
 
         # try to match a reserved keyword
-        return Token(tokens.reserved.get(s, TokenType.IDENTIFIER), s, self._lineno)
+        return Token(tokens.reserved.get(s.lower(), TokenType.IDENTIFIER), s, self._lineno)
 
     def _match_integer(self, c):
         """

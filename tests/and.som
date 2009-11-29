@@ -2,4 +2,4 @@
 //oh, hai
 let x = 3 and y = 5 and z = 10
 // is this thing on?
-    in Print(x+y, z, "hello")
+    in Print(x+y, z, "hello", true)

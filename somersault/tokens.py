@@ -41,8 +41,11 @@ class TokenType(object):
      NEG,
 
      COMMENT,
-     UNKNOWN
-     ) = range(28)
+     UNKNOWN,
+
+     BOOL,
+     NIL,
+     ) = range(30)
 
     
      
@@ -90,6 +93,9 @@ class Token(object):
 
         if type == TokenType.COMMENT: return "COMMENT"
 
+        if type == TokenType.BOOL: return "BOOL"
+        if type == TokenType.NIL: return "NIL"
+
         return "UnknownToken"
     
     def __str__(self):
@@ -118,7 +124,11 @@ reserved = {"(": TokenType.LPAREN,
             "le": TokenType.LE,
             "eq": TokenType.EQ,
             "ne": TokenType.NE,
-            "neg": TokenType.NEG}
+            "neg": TokenType.NEG,
+
+            "true": TokenType.BOOL,
+            "false": TokenType.BOOL,
+            "nil": TokenType.NIL}
 
 # valid string and comment characters
 string_comment_chars = tuple(string.digits) + \
