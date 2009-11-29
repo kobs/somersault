@@ -136,17 +136,49 @@ class String(Node):
     def eval(self, env):
         return self.value
 
-class BinOp(Node):
+class UnaryOp(Node):
     """
-    Represents a binary operation Node.
+    Represents a unary expression.
+    """
+    ops = {"neg": operator.neg,
+           "not": operator.not_}
+    
+    def __init__(self, token, operand):
+        self.operator = token.value
+        self.operand = operand
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        yield self.operand
+        raise StopIteration
+
+    def __str__(self):
+        return "<UnaryOp: %s %s>" % (self.operand, self.operator)
+
+    def eval(self, env):
+        return ops[self.operator](self.operand.eval(env))
+    
+class BinaryOp(Node):
+    """
+    Represents a binary expression.
     """
     ops = {"+":   operator.add,
            "-":   operator.sub,
-           "neg": operator.neg,
            "*":   operator.mul,
            "/":   operator.div,
            "**":  operator.pow,
-           "@":   operator.add}
+           "@":   operator.add,
+
+           "or":  operator.or,
+           "&":   operator.and,
+           "gr":  operator.gt,
+           "ge":  operator.ge,
+           "ls":  operator.lt,
+           "le":  operator.le,
+           "eq":  operator.eq,
+           "ne":  operator.ne}
     
     def __init__(self, token, left, right):
         self.operator = token.value
@@ -162,7 +194,7 @@ class BinOp(Node):
         raise StopIteration
     
     def __str__(self):
-        return "<BinOp: %s %s %s>" % (self.left, self.operator, self.right)
+        return "<BinaryOp: %s %s %s>" % (self.left, self.operator, self.right)
 
     def eval(self, env):
         return ops[self.operator](self.left.eval(env), self.right.eval(env))
