@@ -1,3 +1,5 @@
+import operator
+
 from exception import NotImplemented
 
 class Node(object):
@@ -138,6 +140,14 @@ class BinOp(Node):
     """
     Represents a binary operation Node.
     """
+    ops = {"+":   operator.add,
+           "-":   operator.sub,
+           "neg": operator.neg,
+           "*":   operator.mul,
+           "/":   operator.div,
+           "**":  operator.pow,
+           "@":   operator.add}
+    
     def __init__(self, token, left, right):
         self.operator = token.value
         self.left = left
