@@ -236,8 +236,3 @@ class Lexer(object):
             next = self._peek()
             if not next:
                 break
-
-
-
-for t in Lexer(file(sys.argv[1]).read()):
-    print t

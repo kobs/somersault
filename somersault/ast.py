@@ -171,8 +171,8 @@ class BinaryOp(Node):
            "**":  operator.pow,
            "@":   operator.add,
 
-           "or":  operator.or,
-           "&":   operator.and,
+           "or":  operator.or_,
+           "&":   operator.and_,
            "gr":  operator.gt,
            "ge":  operator.ge,
            "ls":  operator.lt,
