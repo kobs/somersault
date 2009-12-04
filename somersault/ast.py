@@ -1,6 +1,7 @@
 import operator
 
 from exception import NotImplemented
+from tokens import *
 
 class Node(object):
     """
@@ -134,6 +135,42 @@ class String(Node):
     def eval(self, env):
         return self.value
 
+class Let(Node):
+    def __init__(self, token):
+        super(Let, self).__init__(token)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        yield child
+        yield sibling
+        raise StopIteration
+
+    def __str__(self):
+        return "<Let: %s %s>" % (self.child, self.sibling)
+
+    def eval(self, env):
+        pass # return self....eval(env)
+
+class Lambda(Node):
+    def __init__(self, token):
+        super(Lambda, self).__init__(token)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        yield child
+        yield sibling
+        raise StopIteration
+
+    def __str__(self):
+        return "<Lambda: %s>" % self.child
+
+    def eval(self, env):
+        pass # return self....eval(env)
+        
 class UnaryOp(Node):
     """
     Represents a unary expression.
@@ -203,3 +240,20 @@ class AST(object):
     """
     def __init__(self, nodes=None):
         self.nodes = nodes
+
+def get_node(token):
+    """
+    Return the appropriate Node, based on the token type.
+    Returns Node if the token doesn't have a specific Node type.
+    """
+    # TokenType -> Node
+    nodes = {TokenType.IDENTIFIER: Identifier,
+             TokenType.INTEGER: Integer,
+             TokenType.STRING: String,
+             TokenType.BOOL: Bool,
+             TokenType.NIL: Nil,
+             TokenType.DUMMY: Dummy,
+
+             TokenType.LET: Let}
+
+    return nodes.get(token.type, Node)(token)

@@ -59,6 +59,15 @@ class Token(object):
         self.value = value
         self.lineno = lineno
 
+    def __eq__(self, other):
+        if self.type not in case_sensitive and isinstance(other, str):
+            return self.value.lower() == other.lower()
+
+        return self.type == other.type and value == other_value
+
+    def __ne__(self, other):
+        return not self == other
+    
     def type_str(self, type):
         """
         Return the string representation of the token type. Ugly.
@@ -136,6 +145,10 @@ string_comment_chars = tuple(string.digits) + \
                        tuple(string.letters) + \
                        tuple(string.punctuation) + \
                        tuple(string.whitespace)
+
+# case-sensitive token types
+case_sensitive = (TokenType.IDENTIFIER,
+                  TokenType.STRING)
 
 # valid rand types
 rand = (TokenType.IDENTIFIER,

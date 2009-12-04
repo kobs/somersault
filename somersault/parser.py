@@ -55,20 +55,20 @@ class Parser(object):
         if token.type in tokens.rand:
             pass # build_tree
         
-        if self.next is not token:
+        if self.next != token:
             error("Expected %s but found %s on line %d" % (next.value, token.value, next.lineno))
 
         next = self.lexer.next()
 
     #### Grammar specific methods ####
     def expression(self):
-        if next is "let":
+        if next == "let":
             read("let")
             # D()
             read("in")
-            # expression()
-            # build_tree(let)
-        elif next is "fn":
+            expression()
+            build_tree(let)
+        elif next == "fn":
             read("fn")
             # for each parameter:
             #    variable()
