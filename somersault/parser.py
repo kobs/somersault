@@ -5,7 +5,8 @@ from utils import *
 
 class Parser(object):
     """
-    An LL(1) parser for Somersault.
+    An LL(1) parser for Somersault. This parser implementation is basically the grammar
+    translated to Python. In other words, it's Somersault specific.
     """
     def __init__(self, source):
         self.lexer = Lexer(source)

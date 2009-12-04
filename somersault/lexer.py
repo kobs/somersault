@@ -200,7 +200,6 @@ class Lexer(object):
         if not c:
             return None
 
-        debug("c = %s" % c)
         if c in string.punctuation:
             return self._match_operator(c)
         if c in string.digits:
