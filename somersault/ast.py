@@ -8,6 +8,8 @@ class Node(object):
     """
     def __init__(self, token):
         self.value = token.value
+        self.child = None
+        self.sibling = None
 
     def __iter__(self):
         return self
@@ -29,8 +31,7 @@ class Identifier(Node):
     Represents an Identifier Node.
     """
     def __init__(self, token):
-        self.value = token.value
-        self.children = None
+        super(Identifier, self).__init__(token)
 
     def __iter__(self):
         return self
@@ -49,7 +50,7 @@ class Nil(Node):
     Represents nil
     """
     def __init__(self, token):
-        self.value = "nil"
+        super(Nil, self).__init__(token)
 
     def __iter__(self):
         return self
@@ -65,8 +66,7 @@ class Dummy(Node):
     Represents dummy
     """
     def __init__(self, token):
-        self.value = "dummy"
-        self.token
+        super(Dummy, self).__init__(token)
 
     def __iter__(self):
         return self
@@ -82,7 +82,7 @@ class Bool(Node):
     Represents a boolean Node.
     """
     def __init__(self, token):
-        self.value = bool(token.value)
+        super(Bool, self).__init__(token)
 
     def __iter__(self):
         return self
@@ -101,8 +101,7 @@ class Integer(Node):
     Represents an integral Node.
     """
     def __init__(self, token):
-        self.value = token.value
-        self.children = None
+        super(Integer, self).__init__(token)
 
     def __iter__(self):
         return self
@@ -121,8 +120,7 @@ class String(Node):
     Represents a string literal Node.
     """
     def __init__(self, token):
-        self.value = token.value
-        self.children = None
+        super(String, self).__init__(token)
 
     def __iter__(self):
         return self

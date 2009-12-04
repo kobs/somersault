@@ -45,7 +45,8 @@ class TokenType(object):
 
      BOOL,
      NIL,
-     ) = range(30)
+     DUMMY,
+     ) = range(31)
 
     
      
@@ -135,3 +136,11 @@ string_comment_chars = tuple(string.digits) + \
                        tuple(string.letters) + \
                        tuple(string.punctuation) + \
                        tuple(string.whitespace)
+
+# valid rand types
+rand = (TokenType.IDENTIFIER,
+        TokenType.INTEGER,
+        TokenType.STRING,
+        TokenType.BOOL,
+        TokenType.NIL,
+        TokenType.DUMMY)
