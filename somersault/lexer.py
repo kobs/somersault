@@ -127,14 +127,14 @@ class Lexer(object):
         if c == "\'":
             return self._match_string(c)
 
-        if c == "/":
-            return self._match_comment(c)
-        
         s = c
         next = self._peek()
         if not next:
             return Token(TokenType.OPERATOR, s, self._lineno)
 
+        if c == "/" and next == "/":
+            return self._match_comment(c)
+        
         while next in string.punctuation:
             s += next
             self._advance()
