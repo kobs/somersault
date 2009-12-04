@@ -102,10 +102,8 @@ class Lexer(object):
         self._state = State.INTEGER
         num = int(c)
         next = self._peek()
-        if not next:
-            return None
 
-        while next in string.digits:
+        while next and next in string.digits:
             num = (num * 10) + int(next)
             self._advance()
             next = self._peek()
@@ -201,7 +199,8 @@ class Lexer(object):
         c = self._next_char()
         if not c:
             return None
-        
+
+        debug("c = %s" % c)
         if c in string.punctuation:
             return self._match_operator(c)
         if c in string.digits:
