@@ -57,6 +57,21 @@ class Nil(Node):
     def eval(self, env):
         return None
 
+class Unit(Node):
+    """
+    Represents () ... unit
+    """
+    def __init__(self):
+        self.value = "()"
+        self.child = None
+        self.sibling = None
+
+    def __str__(self):
+        return "<Unit: ()>"
+
+    def eval(self, env):
+        return None
+    
 class Dummy(Node):
     """
     Represents dummy

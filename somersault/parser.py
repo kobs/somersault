@@ -17,7 +17,25 @@ class Parser(object):
         """
         Parse the input stream into an AST.
         """
-        self.next = self.lexer.next()
+        self.next_token()
+        self.variable()
+
+    def print_ast(self):
+        """
+        Print the abstract syntax tree of the source file.
+        """
+        def preorder(root, depth):
+            if root:
+                for i in range(depth):
+                    print ".",
+                print root
+                preorder(root.child, depth + 1)
+                preorder(root.sibling, depth)
+                
+        preorder(self.nodes.pop(), 0)
+
+        if len(self.nodes) > 0:
+            error("Possible error: extra nodes remain on the stack.")
 
     def print_tokens(self):
         """
@@ -26,11 +44,20 @@ class Parser(object):
         for token in self.tokens:
             print token
 
+    def next_token(self):
+        self.next = self.lexer.next()
+        if self.next:
+            self.tokens.append(self.next)
+        return self.next
+    
     def build_leaf(self, token):
         """
         Build an AST node with no children.
         """
-        self.nodes.append(get_node(token))
+        if isinstance(token, Token):
+            self.nodes.append(get_node(token))
+        else:
+            self.nodes.append(token)
 
     def build_parent(self, token, num_children=0):
         """
@@ -42,7 +69,7 @@ class Parser(object):
         for child in range(num_children):
             children.append(self.pop_node())
 
-        for child in range(num_children, 0, -1):
+        for child in range(num_children - 1, 0, -1):
             children[child].sibling = children[child - 1]
 
         if num_children > 0:
@@ -55,19 +82,25 @@ class Parser(object):
         Pop the tree node from the top of the stack.
         """
         return self.nodes.pop()
-            
+        
     def read(self, token):
         """
-        Read an expected value. If token != next, error.
+        Read an expected token.
         If token is a rand, build a childless tree.
         """
         if token.type in tokens.rand:
             self.build_leaf(token)
         
-        if self.next != token:
-            error("Expected %s but found %s on line %d" % (next.value, token.value, next.lineno))
+        self.next_token()
 
-        next = self.lexer.next()
+    def read_string(self, value):
+        """
+        Read an expected string value.
+        """
+        if self.next != value:
+            error("Expected %s but found %s on line %d" % (self.next.value, value, self.next.lineno))
+
+        self.next_token()
 
     #### Grammar specific methods ####
     def expression(self):
@@ -78,27 +111,72 @@ class Parser(object):
         Ew -> T 'where' Dr       => 'where'
            -> T;
         """
-        if next == "let":
-            read("let")
+        if self.next == "let":
+            self.read("let")
             # definition()
-            read("in")
+            self.read("in")
             # expression()
-            build_tree(let)
-        elif next == "fn":
-            read("fn")
-            # for each parameter:
-            #    variable()
-            # read(".")
+            # ew, the number of children should probably be a property of the Node object.
+            build_tree(let, 2)
+        elif self.next == "fn":
+            self.read("fn")
+            n = 0
+            while self.next.type == TokenType.IDENTIFIER or self.next.type == TokenType.LPAREN:
+                # variable()
+                n += 1
+            self.read(".")
             # expression()
-            # build_tree(lambda)
+            # build_tree(lambda, n + 1)
         else:
             pass # where()
+
+    def variable(self):
+        """
+        Vb -> '<IDENTIFIER>'
+           -> '(' Vl ')'
+           -> '(' ')'          => '()'
+        """
+        if self.next.type == TokenType.IDENTIFIER:
+            self.read(self.next)
+        elif self.next.type == TokenType.LPAREN:
+            self.read_string("(")
+            if self.next.type == TokenType.IDENTIFIER:
+                self.variable_list()
+                self.read_string(")")
+            else:
+                self.read_string(")")
+                self.build_leaf(Unit())
+        else:
+            error("Expected an IDENTIFIER or '(', but found a(n) %s (of value %s) on line %d." % (self.next.type_str(), self.next.value, self.next.lineno))
+
+    def variable_list(self):
+        """
+        Vl -> '<IDENTIFIER>' list ','  => ','?
+        """
+        n = 0
+        if self.next.type == TokenType.IDENTIFIER:
+            self.read(self.next)
+
+        token = self.next
+        while self.next.type == TokenType.COMMA:
+            self.read_string(",")
+            if self.next.type != TokenType.IDENTIFIER:
+                error("Expected an IDENTIFIER, but found a(n) %s (of value %s) on line %d." % (self.next.type_str(), self.next.value, self.next.lineno))
+            self.read(self.next)
+            n += 1
+
+        if n > 0:
+            self.build_parent(token, n + 1)
+            
     ##################################
 
 def main():
-    pass #p = Parser(file(sys.argv[1]).read())
-    #p.parse()
-    #p.print_tokens()
-    
+    p = Parser(file(sys.argv[1]).read())
+    p.parse()
+    print "---"
+    p.print_tokens()
+    print "---"
+    p.print_ast()
+
 if __name__ == "__main__":
     main()

@@ -6,6 +6,6 @@ def debug(msg):
 
 def error(msg):
     import sys
-    print msg
+    print "Error:", msg
     sys.exit(0)
     

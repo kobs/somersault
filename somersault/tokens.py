@@ -68,10 +68,12 @@ class Token(object):
     def __ne__(self, other):
         return not self == other
     
-    def type_str(self, type):
+    def type_str(self, type=None):
         """
         Return the string representation of the token type. Ugly.
         """
+        if not type:
+            type = self.type
         if type == TokenType.IDENTIFIER: return "IDENTIFIER"
         if type == TokenType.INTEGER: return "INTEGER"
         if type == TokenType.OPERATOR: return "OPERATOR"
