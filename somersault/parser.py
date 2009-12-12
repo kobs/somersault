@@ -20,13 +20,22 @@ class Parser(object):
         self.next = self.lexer.next()
 
     def print_tokens(self):
+        """
+        Print the tokens collected by the parser/lexer.
+        """
         for token in self.tokens:
             print token
 
-    def build_child(self, token):
+    def build_leaf(self, token):
+        """
+        Build an AST node with no children.
+        """
         self.nodes.append(get_node(token))
 
     def build_parent(self, token, num_children=0):
+        """
+        Build an AST node with children.
+        """
         parent = get_node(token)
 
         children = [] # stack of children Nodes
@@ -53,7 +62,7 @@ class Parser(object):
         If token is a rand, build a childless tree.
         """
         if token.type in tokens.rand:
-            pass # build_tree
+            self.build_leaf(token)
         
         if self.next != token:
             error("Expected %s but found %s on line %d" % (next.value, token.value, next.lineno))
@@ -62,11 +71,18 @@ class Parser(object):
 
     #### Grammar specific methods ####
     def expression(self):
+        """
+        E  -> 'let' D 'in' E     => 'let'
+           -> 'fn' Vb+ '.' E     => 'lambda'
+           -> Ew;
+        Ew -> T 'where' Dr       => 'where'
+           -> T;
+        """
         if next == "let":
             read("let")
-            # D()
+            # definition()
             read("in")
-            expression()
+            # expression()
             build_tree(let)
         elif next == "fn":
             read("fn")
