@@ -18,7 +18,7 @@ class Parser(object):
         Parse the input stream into an AST.
         """
         self.next_token()
-        self.variable()
+        self.parameter()
 
     def print_ast(self):
         """
@@ -122,7 +122,7 @@ class Parser(object):
             self.read("fn")
             n = 0
             while self.next.type == TokenType.IDENTIFIER or self.next.type == TokenType.LPAREN:
-                # variable()
+                # parameter()
                 n += 1
             self.read(".")
             # expression()
@@ -130,7 +130,7 @@ class Parser(object):
         else:
             pass # where()
 
-    def variable(self):
+    def parameter(self):
         """
         Vb -> '<IDENTIFIER>'
            -> '(' Vl ')'
@@ -141,7 +141,7 @@ class Parser(object):
         elif self.next.type == TokenType.LPAREN:
             self.read_string("(")
             if self.next.type == TokenType.IDENTIFIER:
-                self.variable_list()
+                self.parameter_list()
                 self.read_string(")")
             else:
                 self.read_string(")")
@@ -149,7 +149,7 @@ class Parser(object):
         else:
             error("Expected an IDENTIFIER or '(', but found a(n) %s (of value %s) on line %d." % (self.next.type_str(), self.next.value, self.next.lineno))
 
-    def variable_list(self):
+    def parameter_list(self):
         """
         Vl -> '<IDENTIFIER>' list ','  => ','?
         """
