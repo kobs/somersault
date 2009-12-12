@@ -47,8 +47,10 @@ class Nil(Node):
     Represents nil
     """
     def __init__(self, token):
-        super(Nil, self).__init__(token)
-
+        self.value = token.value
+        self.child = None
+        self.sibling = None
+        
     def __str__(self):
         return "<Nil>"
     
@@ -60,7 +62,9 @@ class Dummy(Node):
     Represents dummy
     """
     def __init__(self, token):
-        super(Dummy, self).__init__(token)
+        self.value = token.value
+        self.child = None
+        self.sibling = None  
 
     def __str__(self):
         return "<Dummy>"
@@ -73,7 +77,9 @@ class Bool(Node):
     Represents a boolean Node.
     """
     def __init__(self, token):
-        super(Bool, self).__init__(token)
+        self.value = token.value
+        self.child = None
+        self.sibling = None
 
     def __str__(self):
         return "<Bool: %s>" % self.value
@@ -86,7 +92,9 @@ class Integer(Node):
     Represents an integral Node.
     """
     def __init__(self, token):
-        super(Integer, self).__init__(token)
+        self.value = token.value
+        self.child = None
+        self.sibling = None
 
     def __str__(self):
         return "<Integer: %s>" % self.value
@@ -99,7 +107,9 @@ class String(Node):
     Represents a string literal Node.
     """
     def __init__(self, token):
-        super(String, self).__init__(token)
+        self.value = token.value
+        self.child = None
+        self.sibling = None
 
     def __str__(self):
         return "<String: %s>" % self.value
@@ -109,7 +119,7 @@ class String(Node):
 
 class Let(Node):
     def __init__(self, token):
-        super(Let, self).__init__(token)
+        self.value = token.value
 
     def __iter__(self):
         return self
@@ -120,14 +130,14 @@ class Let(Node):
         raise StopIteration
 
     def __str__(self):
-        return "<Let: %s %s>" % (self.child, self.sibling)
+        return "<let>"
 
     def eval(self, env):
         pass # return self....eval(env)
 
 class Lambda(Node):
     def __init__(self, token):
-        super(Lambda, self).__init__(token)
+        pass
 
     def __iter__(self):
         return self
@@ -138,7 +148,7 @@ class Lambda(Node):
         raise StopIteration
 
     def __str__(self):
-        return "<Lambda: %s>" % self.child
+        return "<lambda>"
 
     def eval(self, env):
         pass # return self....eval(env)
@@ -162,7 +172,7 @@ class UnaryOp(Node):
         raise StopIteration
 
     def __str__(self):
-        return "<UnaryOp: %s %s>" % (self.operand, self.operator)
+        return "<UnaryOp: %s>" % self.operator
 
     def eval(self, env):
         return ops[self.operator](self.operand.eval(env))
@@ -201,7 +211,7 @@ class BinaryOp(Node):
         raise StopIteration
     
     def __str__(self):
-        return "<BinaryOp: %s %s %s>" % (self.left, self.operator, self.right)
+        return "<BinaryOp: %s>" % self.operator
 
     def eval(self, env):
         return ops[self.operator](self.left.eval(env), self.right.eval(env))
@@ -211,7 +221,10 @@ class AST(object):
     A collection (tree) of Nodes representing an abstract syntax tree.
     """
     def __init__(self, nodes=None):
-        self.nodes = nodes
+        if not nodes:
+            self.nodes = []
+        else:
+            self.nodes = nodes
 
 def get_node(token):
     """
