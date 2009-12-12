@@ -32,13 +32,9 @@ class Identifier(Node):
     Represents an Identifier Node.
     """
     def __init__(self, token):
-        super(Identifier, self).__init__(token)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        raise StopIteration
+        self.value = token.value
+        self.child = None
+        self.sibling = None        
 
     def __str__(self):
         return "<Identifier: %s>" % self.value
@@ -53,12 +49,9 @@ class Nil(Node):
     def __init__(self, token):
         super(Nil, self).__init__(token)
 
-    def __iter__(self):
-        return self
-
-    def next(self):
-        raise StopIteration
-
+    def __str__(self):
+        return "<Nil>"
+    
     def eval(self, env):
         return None
 
@@ -69,12 +62,9 @@ class Dummy(Node):
     def __init__(self, token):
         super(Dummy, self).__init__(token)
 
-    def __iter__(self):
-        return self
-
-    def next(self):
-        raise StopIteration
-
+    def __str__(self):
+        return "<Dummy>"
+    
     def eval(self):
         return None
         
@@ -84,12 +74,6 @@ class Bool(Node):
     """
     def __init__(self, token):
         super(Bool, self).__init__(token)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        raise StopIteration
 
     def __str__(self):
         return "<Bool: %s>" % self.value
@@ -104,12 +88,6 @@ class Integer(Node):
     def __init__(self, token):
         super(Integer, self).__init__(token)
 
-    def __iter__(self):
-        return self
-
-    def next(self):
-        raise StopIteration
-
     def __str__(self):
         return "<Integer: %s>" % self.value
 
@@ -122,12 +100,6 @@ class String(Node):
     """
     def __init__(self, token):
         super(String, self).__init__(token)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        raise StopIteration
 
     def __str__(self):
         return "<String: %s>" % self.value
